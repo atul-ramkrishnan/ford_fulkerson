@@ -1,5 +1,7 @@
 import random
-from Graph import Graph
+import os
+from .Graph import Graph
+import definitions
 
 
 class GraphGenerator:
@@ -30,11 +32,14 @@ class GraphGenerator:
         return graph
     
 
-# graph_generator = GraphGenerator(100, 0.2, 2)
-# graph = graph_generator.generate(directed=True)
+# graph_generator = GraphGenerator(10, 0.2, 2)
+# # graph = graph_generator.generate(directed=True)
+# # print(graph)
+# # graph.save_as_csv("test1.csv")
+# graph = Graph(directed=True)
+# graph.load_from_csv("test1.csv")
 # print(graph)
-# graph.save_as_csv("test1.csv")
 
 graph = Graph()
-graph.load_from_csv("test1.csv")
-graph.save_as_csv("test2.csv")
+graph.load_from_csv(os.path.join(definitions.DATA_DIR, "simple_graph.csv"))
+graph.save_as_csv(os.path.join(definitions.DATA_DIR, "test_simple_graph.csv"))
