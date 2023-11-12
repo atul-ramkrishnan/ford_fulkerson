@@ -1,4 +1,5 @@
 import csv
+import ast
 
 
 class Graph:
@@ -53,25 +54,27 @@ class Graph:
                     edges.append((from_vertex, to_vertex, weight))
         return edges
 
-    def save_as_csv(self, filename):
-        with open(filename, 'w') as csv_file:
+    def save_as_csv(self, filename, overwrite=True):
+        write_mode = 'w' if overwrite else 'a'
+        with open(filename, write_mode) as csv_file:
             writer = csv.writer(csv_file)
-            writer.writerow(['Source', 'Target', 'Weight'])
             for source, edges in self.adj_list.items():
+                data = [source]
                 for target, weight in edges:
-                    writer.writerow([source, target, weight])
+                    data.append((target, weight))
+                writer.writerow(data)
 
-    def load_from_csv(self, filename, overwrite=False):
+    def load_from_csv(self, filename, overwrite=True):
         if overwrite:
             self.reset_graph()
         with open(filename, 'r') as csv_file:
             reader = csv.reader(csv_file)
-            next(reader)
             for row in reader:
-                source, target, weight = row
-                weight = int(weight)
-                self.add_vertex(source)
-                self.add_edge(source, target, weight)
+                source = row[0]
+                self.add_vertex(int(source))
+                for col in range(1, len(row)):
+                    target, weight = ast.literal_eval(row[col])
+                    self.add_edge(int(source), int(target), int(weight))
 
     def __str__(self):
         # For printing the graph's adjacency list
