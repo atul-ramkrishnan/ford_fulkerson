@@ -8,7 +8,7 @@ class Graph:
         self.directed = directed
 
     def reset_graph(self):
-        self.adj_list = {}
+        self.adj_list.clear()
 
     def add_vertex(self, vertex):
         # Ensure that the vertex is not already in the adjacency list
