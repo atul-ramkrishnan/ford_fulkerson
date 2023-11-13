@@ -1,5 +1,4 @@
 import csv
-import ast
 from .Edge import Edge
 
 class Graph:
@@ -18,7 +17,6 @@ class Graph:
             self.add_vertex(from_vertex)
         if to_vertex not in self.adj_list:
             self.add_vertex(to_vertex)
-        # Each edge is now stored with an Edge instance
         self.adj_list[from_vertex][to_vertex] = Edge(capacity)
 
     def remove_edge(self, from_vertex, to_vertex):
@@ -34,12 +32,27 @@ class Graph:
                 if vertex in self.adj_list[from_vertex]:
                     del self.adj_list[from_vertex][vertex]
 
+    def get_flow(self, from_vertex, to_vertex):
+        return self.adj_list[from_vertex][to_vertex].get_flow()
+    
+    def set_flow(self, from_vertex, to_vertex, flow):
+        self.adj_list[from_vertex][to_vertex].set_flow(flow)
+
+    def add_flow(self, from_vertex, to_vertex, delta):
+        self.set_flow(from_vertex, to_vertex, self.get_flow(from_vertex, to_vertex) + delta)
+
+    def get_capacity(self, from_vertex, to_vertex):
+        return self.adj_list[from_vertex][to_vertex].get_capacity()
+
     def get_adjacent_vertices(self, vertex):
         return list(self.adj_list[vertex].keys())
 
     def get_vertices(self):
         return list(self.adj_list.keys())
 
+    def has_edge(self, from_vertex, to_vertex):
+        return self.adj_list[from_vertex][to_vertex] is not None
+    
     def get_edges(self):
         edges = []
         for from_vertex, to_vertices in self.adj_list.items():
