@@ -20,8 +20,8 @@ class GraphGenerator:
                 if from_vertex < to_vertex and self._euclidean_distance(vertex_coordinates[from_vertex], vertex_coordinates[to_vertex]) < self.r:
                     graph.add_edge(from_vertex, to_vertex, random.randint(1, self.upperCap))
 
-    def generate(self, directed=True):
-        graph = Graph(directed)
+    def generate(self):
+        graph = Graph()
         vertex_coordinates = {}
         for i in range(self.n):
             graph.add_vertex(i)
@@ -33,10 +33,10 @@ class GraphGenerator:
     
 
 # graph_generator = GraphGenerator(10, 0.2, 2)
-# # graph = graph_generator.generate(directed=True)
+# # graph = graph_generator.generate()
 # # print(graph)
 # # graph.save_as_csv("test1.csv")
-# graph = Graph(directed=True)
+# graph = Graph()
 # graph.load_from_csv("test1.csv")
 # print(graph)
 

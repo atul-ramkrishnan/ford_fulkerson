@@ -3,9 +3,8 @@ import ast
 
 
 class Graph:
-    def __init__(self, directed=True):
+    def __init__(self):
         self.adj_list = {}
-        self.directed = directed
 
     def reset_graph(self):
         self.adj_list.clear()
@@ -17,18 +16,10 @@ class Graph:
 
     def add_edge(self, from_vertex, to_vertex, weight=1):        
         self.adj_list[from_vertex].append((to_vertex, weight))
-        
-        # If the graph is undirected, add an edge from the to_vertex back to the from_vertex
-        if not self.directed:
-            self.adj_list[to_vertex].append((from_vertex, weight))
 
     def remove_edge(self, from_vertex, to_vertex):
         # Remove edge from the from_vertex
         self.adj_list[from_vertex] = [(vertex, weight) for vertex, weight in self.adj_list[from_vertex] if vertex != to_vertex]
-        
-        # If the graph is undirected, remove the reverse edge too
-        if not self.directed:
-            self.adj_list[to_vertex] = [(vertex, weight) for vertex, weight in self.adj_list[to_vertex] if vertex != from_vertex]
 
     def remove_vertex(self, vertex):
         # Remove all edges to this vertex
@@ -40,7 +31,10 @@ class Graph:
             del self.adj_list[vertex]
 
     def get_adjacent_vertices(self, vertex):
-        return self.adj_list[vertex]
+        if vertex in self.adj_list:
+            return self.adj_list[vertex]
+        else:
+            raise Exception("Vertex not in graph.")
     
     def get_vertices(self):
         return self.adj_list.keys()
@@ -50,7 +44,7 @@ class Graph:
         edges = []
         for from_vertex, to_vertices in self.adj_list.items():
             for to_vertex, weight in to_vertices:
-                if self.directed or (to_vertex, from_vertex, weight) not in edges:
+                if (to_vertex, from_vertex, weight) not in edges:
                     edges.append((from_vertex, to_vertex, weight))
         return edges
 
@@ -71,16 +65,16 @@ class Graph:
             reader = csv.reader(csv_file)
             for row in reader:
                 source = row[0]
-                self.add_vertex(int(source))
+                self.add_vertex(source)
                 for col in range(1, len(row)):
                     target, weight = ast.literal_eval(row[col])
-                    self.add_edge(int(source), int(target), int(weight))
+                    self.add_edge(source, target, weight)
 
     def __str__(self):
         # For printing the graph's adjacency list
         return '\n'.join([f'{vertex}: {neighbors}' for vertex, neighbors in self.adj_list.items()])
 
-# graph = Graph(directed=False)
+# graph = Graph()
 # graph.add_vertex('A')
 # graph.add_vertex('B')
 # graph.add_vertex('C')
