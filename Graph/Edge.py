@@ -1,6 +1,10 @@
-import csv
-import ast
-from .Edge import Edge
+class Edge:
+    def __init__(self, capacity, flow=0):
+        self.capacity = capacity
+        self.flow = flow
+
+    def __repr__(self):
+        return f"Edge(capacity={self.capacity}, flow={self.flow})"
 
 class Graph:
     def __init__(self):
@@ -51,37 +55,25 @@ class Graph:
         with open(filename, 'w', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(['Source', 'Target', 'Capacity', 'Flow'])
-            for source in self.get_vertices():  # Iterate through all vertices
-                if source in self.adj_list and self.adj_list[source]:  # If the vertex has outgoing edges
-                    for target, edge in self.adj_list[source].items():
-                        writer.writerow([source, target, edge.capacity, edge.flow])
-                else:  # If the vertex has no outgoing edges, write only the vertex
-                    writer.writerow([source, None, None, None])
+            for source, targets in self.adj_list.items():
+                for target, edge in targets.items():
+                    writer.writerow([source, target, edge.capacity, edge.flow])
 
     def load_from_csv(self, filename):
         self.reset_graph()
         with open(filename, 'r') as csv_file:
             reader = csv.reader(csv_file)
-            header = next(reader)  # Skip the header
+            header = next(reader)
             for row in reader:
-                source = row[0]
-                self.add_vertex(source)  # Add the vertex regardless of edges
-                # Only add edges if they exist
-                if row[1]:  # Check if target vertex exists
-                    target, capacity, flow = row[1], int(row[2]), int(row[3])
-                    self.add_edge(source, target, capacity)
-                    self.adj_list[source][target].flow = flow
+                source, target, capacity, flow = row
+                self.add_edge(source, target, int(capacity))
+                self.adj_list[source][target].flow = int(flow)
 
     def __str__(self):
         return '\n'.join([f'{vertex}: {neighbors}' for vertex, neighbors in self.adj_list.items()])
 
-# graph = Graph()
-# graph.add_vertex('A')
-# graph.add_vertex('B')
-# graph.add_vertex('C')
-# graph.add_edge('A', 'B', 1)
-# graph.add_edge('A', 'C', 2)
-# graph.add_edge('B', 'C', 3)
-# graph.add_edge('A', 'B', 2)
-
-# print(graph)
+# The Edge class now stores both capacity and flow.
+# The Graph class has been refactored to use the Edge class for storing edges.
+# The add_edge, remove_edge, and remove_vertex methods have been updated accordingly.
+# The save_as_csv and load_from_csv methods have been updated to handle the Edge class.
+# The __str__ method and other methods have been adapted to the new representation of edges.
