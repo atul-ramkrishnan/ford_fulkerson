@@ -34,7 +34,7 @@ class Graph:
         if vertex in self.adj_list:
             return self.adj_list[vertex]
         else:
-            raise Exception("Vertex not in graph.")
+            raise KeyError(f"Vertex {vertex} not in graph.")
     
     def get_vertices(self):
         return self.adj_list.keys()
@@ -67,8 +67,9 @@ class Graph:
                 source = row[0]
                 self.add_vertex(source)
                 for col in range(1, len(row)):
-                    target, weight = ast.literal_eval(row[col])
-                    self.add_edge(source, target, weight)
+                    if row[col] and row[col] != "":
+                        target, weight = ast.literal_eval(row[col])
+                        self.add_edge(str(source), str(target), weight)
 
     def __str__(self):
         # For printing the graph's adjacency list
