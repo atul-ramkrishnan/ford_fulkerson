@@ -18,13 +18,13 @@ class GraphGenerator:
             for to_vertex in vertex_coordinates:
                 print(f"{from_vertex} --> {to_vertex}")
                 if from_vertex < to_vertex and self._euclidean_distance(vertex_coordinates[from_vertex], vertex_coordinates[to_vertex]) < self.r:
-                    graph.add_edge(from_vertex, to_vertex, random.randint(1, self.upperCap))
+                    graph.add_edge(str(from_vertex), str(to_vertex), random.randint(1, self.upperCap))
 
     def generate(self):
         graph = Graph()
         vertex_coordinates = {}
         for i in range(self.n):
-            graph.add_vertex(i)
+            graph.add_vertex(str(i))
             vertex_coordinates[i] = (random.uniform(0, 1), random.uniform(0, 1))
 
         self._connect_vertices(graph, vertex_coordinates)
