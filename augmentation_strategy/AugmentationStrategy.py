@@ -1,3 +1,3 @@
 class AugmentationStrategy:
-    def getAugmentingPath(self, graph, source, sink):
+    def get_augmenting_path(self, graph, source, sink):
         pass
