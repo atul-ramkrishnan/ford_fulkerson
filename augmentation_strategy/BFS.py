@@ -2,7 +2,7 @@ from .AugmentationStrategy import AugmentationStrategy
 
 
 class BFS(AugmentationStrategy):
-    def execute(self, graph, source, sink):
+    def getAugmentingPath(self, graph, source, sink):
         visited = [source]
         queue = [(source, [source])]
 
