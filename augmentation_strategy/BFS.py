@@ -15,5 +15,14 @@ class BFS(AugmentationStrategy):
                     visited.append(neighbour)
                     queue.append((neighbour, path + [neighbour]))
 
-    def get_longest_path(self, graph, source):
-        pass
+    def get_farthest_vertex(self, graph, source):
+        visited = {}
+        queue = [source]
+        visited[source] = 0
+        while queue:
+            m = queue.pop()
+            for neighbour in graph.get_adjacent_vertices(m):
+                if neighbour not in visited:
+                    visited[neighbour] = visited[m] + 1
+                    queue.append(neighbour)
+        return max(visited, key=visited.get)
