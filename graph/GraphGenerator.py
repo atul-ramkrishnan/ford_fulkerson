@@ -20,11 +20,9 @@ class GraphGenerator:
                 (self._squared_euclidean_distance(vertex_coordinates[from_vertex], vertex_coordinates[to_vertex]) <= self.r**2)):
                     rand = random.uniform(0, 1)
                     if rand < 0.5:
-                        # print(graph)
                         if not (graph.has_edge(str(from_vertex), str(to_vertex)) or graph.has_edge(str(to_vertex), str(from_vertex))):
                             graph.add_edge(str(from_vertex), str(to_vertex), random.randint(1, self.upperCap))
                     else:
-                        # print(graph)
                         if not (graph.has_edge(str(from_vertex), str(to_vertex)) or graph.has_edge(str(to_vertex), str(from_vertex))):
                             graph.add_edge(str(to_vertex), str(from_vertex), random.randint(1, self.upperCap))
                 
@@ -36,7 +34,6 @@ class GraphGenerator:
             vertex_coordinates[i] = (random.uniform(0, 1), random.uniform(0, 1))
 
         self._connect_vertices(graph, vertex_coordinates)
-        print(graph)
 
         return graph
     
