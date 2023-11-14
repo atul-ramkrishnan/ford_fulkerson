@@ -1,7 +1,5 @@
 import random
-import os
 from .Graph import Graph
-import definitions
 
 
 class GraphGenerator:
@@ -36,16 +34,3 @@ class GraphGenerator:
         self._connect_vertices(graph, vertex_coordinates)
 
         return graph
-    
-
-# graph_generator = GraphGenerator(10, 0.2, 2)
-# # graph = graph_generator.generate()
-# # print(graph)
-# # graph.save_as_csv("test1.csv")
-# graph = Graph()
-# graph.load_from_csv("test1.csv")
-# print(graph)
-
-graph = Graph()
-graph.load_from_csv(os.path.join(definitions.DATA_DIR, "simple_graph.csv"))
-graph.save_as_csv(os.path.join(definitions.DATA_DIR, "test_simple_graph.csv"))

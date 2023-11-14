@@ -1,6 +1,7 @@
 import csv
 from .Edge import Edge
 
+
 class Graph:
     def __init__(self):
         self.adj_list = {}
@@ -86,14 +87,3 @@ class Graph:
 
     def __str__(self):
         return '\n'.join([f'{vertex}: {neighbors}' for vertex, neighbors in self.adj_list.items()])
-
-# graph = Graph()
-# graph.add_vertex('A')
-# graph.add_vertex('B')
-# graph.add_vertex('C')
-# graph.add_edge('A', 'B', 1)
-# graph.add_edge('A', 'C', 2)
-# graph.add_edge('B', 'C', 3)
-# graph.add_edge('A', 'B', 2)
-
-# print(graph)
