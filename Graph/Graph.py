@@ -49,9 +49,9 @@ class Graph:
 
     def get_vertices(self):
         return list(self.adj_list.keys())
-
+    
     def has_edge(self, from_vertex, to_vertex):
-        return self.adj_list[from_vertex][to_vertex] is not None
+        return from_vertex in self.adj_list and to_vertex in self.adj_list[from_vertex]
     
     def get_edges(self):
         edges = []
@@ -64,11 +64,11 @@ class Graph:
         with open(filename, 'w', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(['Source', 'Target', 'Capacity', 'Flow'])
-            for source in self.get_vertices():  # Iterate through all vertices
-                if source in self.adj_list and self.adj_list[source]:  # If the vertex has outgoing edges
+            for source in self.get_vertices():
+                if source in self.adj_list and self.adj_list[source]:
                     for target, edge in self.adj_list[source].items():
                         writer.writerow([source, target, edge.capacity, edge.flow])
-                else:  # If the vertex has no outgoing edges, write only the vertex
+                else:
                     writer.writerow([source, None, None, None])
 
     def load_from_csv(self, filename):
@@ -78,9 +78,8 @@ class Graph:
             header = next(reader)  # Skip the header
             for row in reader:
                 source = row[0]
-                self.add_vertex(source)  # Add the vertex regardless of edges
-                # Only add edges if they exist
-                if row[1]:  # Check if target vertex exists
+                self.add_vertex(source)
+                if row[1]:
                     target, capacity, flow = row[1], int(row[2]), int(row[3])
                     self.add_edge(source, target, capacity)
                     self.adj_list[source][target].flow = flow
