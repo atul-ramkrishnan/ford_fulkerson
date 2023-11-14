@@ -1,4 +1,4 @@
-from Graph.Graph import Graph
+from graph.Graph import Graph
 
 
 class FordFulkerson:
