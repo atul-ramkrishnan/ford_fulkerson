@@ -3,6 +3,9 @@ import random
 from augmentation_strategy.BFS import BFS
 from augmentation_strategy.Dijkstra import Dijkstra
 from augmentation_strategy.ShortestAugmentingPath import ShortestAugmentingPath
+from augmentation_strategy.DFSlike import DFSlike
+from augmentation_strategy.MaximumCapacity import MaximumCapacity
+from augmentation_strategy.Random import Random
 from graph.Graph import Graph
 from graph.GraphGenerator import GraphGenerator
 from definitions import DATA_DIR
@@ -34,6 +37,15 @@ def main():
     print(ff.get_flow(graph, "S", "T"))
 
     ff = FordFulkerson(strategy=ShortestAugmentingPath())
+    print(ff.get_flow(graph, "S", "T"))
+
+    ff = FordFulkerson(strategy=DFSlike())
+    print(ff.get_flow(graph, "S", "T"))
+
+    ff = FordFulkerson(strategy=MaximumCapacity())
+    print(ff.get_flow(graph, "S", "T"))
+
+    ff = FordFulkerson(strategy=Random())
     print(ff.get_flow(graph, "S", "T"))
 
 
