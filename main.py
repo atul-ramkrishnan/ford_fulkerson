@@ -2,6 +2,7 @@ import os
 import random
 from augmentation_strategy.BFS import BFS
 from augmentation_strategy.Dijkstra import Dijkstra
+from augmentation_strategy.ShortestAugmentingPath import ShortestAugmentingPath
 from graph.Graph import Graph
 from graph.GraphGenerator import GraphGenerator
 from definitions import DATA_DIR
@@ -30,6 +31,9 @@ def main():
     print(ff.get_flow(graph, "S", "T"))
 
     ff = FordFulkerson(strategy=Dijkstra())    
+    print(ff.get_flow(graph, "S", "T"))
+
+    ff = FordFulkerson(strategy=ShortestAugmentingPath())
     print(ff.get_flow(graph, "S", "T"))
 
 
