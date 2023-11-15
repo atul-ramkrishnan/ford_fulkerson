@@ -24,7 +24,8 @@ class FordFulkerson:
                     if capacity > flow:
                         residual_graph.add_edge(from_vertex, to_vertex, capacity - flow)
 
-                    residual_graph.add_edge(to_vertex, from_vertex, flow)
+                    if flow > 0:
+                        residual_graph.add_edge(to_vertex, from_vertex, flow)
         
         return residual_graph
 
