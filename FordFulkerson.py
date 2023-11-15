@@ -44,10 +44,12 @@ class FordFulkerson:
     def _get_total_flow(self, graph, source):
         return sum(graph.get_flow(source, neighbour) for neighbour in graph.get_adjacent_vertices(source))
 
-    def get_flow(self, graph, source, sink):
+    def get_flow(self, graph, source, sink, metrics=None):
         self._initialize_flow(graph)
         path = self.strategy.get_augmenting_path(self._get_residual_graph(graph), source, sink)
         while path:
+            if metrics:
+                metrics.add_path_length(path)
             self._augment_flow(path, self._get_residual_graph(graph), graph)
             path = self.strategy.get_augmenting_path(self._get_residual_graph(graph), source, sink)
 
