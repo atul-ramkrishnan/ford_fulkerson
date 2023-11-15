@@ -19,7 +19,6 @@ class Dijkstra(AugmentationStrategy):
         visited = set()
 
         while Q:
-            
             u_distance, u = heapq.heappop(Q)
             # print(sink, u)
             if u == sink:
