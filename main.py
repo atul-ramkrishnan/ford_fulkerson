@@ -13,41 +13,57 @@ from FordFulkerson import FordFulkerson
 from utilities.Metrics import Metrics
 
 
+def print_metrics(max_flow, length_longest_acyclic_path, metrics):
+    print(f"Max flow: {max_flow}")
+    print(f"Longest acyclic path length: {length_longest_acyclic_path}")
+    print(f"Number paths: {metrics.get_number_paths()}")
+    print(f"Mean length: {metrics.get_mean_length()}")
+    print(f"MPL: {metrics.get_mean_proportional_length()}")
+    print(f"Total edges: {metrics.get_total_edges()}")
+
 
 def main():
-    # n = 30
-    # r = 0.2
-    # upperCap = 2
-    # graphGenerator = GraphGenerator(n, r, upperCap)
-    # graph = graphGenerator.generate()
-    # graph.save_as_csv(os.path.join(DATA_DIR, f"test_n_{n}_r_{r}_upperCap_{upperCap}.csv"))
-    # bfs = BFS()
-    # source = str(random.randint(0, n))
-    # farthestVertex = bfs.get_farthest_vertex(graph, source) 
-    # print(source, farthestVertex)
-
-    graph = Graph()
-    graph.load_from_csv(os.path.join(DATA_DIR, "simple_graph.csv"))
+    n = 100
+    r = 0.2
+    upperCap = 2
+    graphGenerator = GraphGenerator(n, r, upperCap)
+    graph = graphGenerator.generate()
+    
+    # graph = Graph()
+    # graph.load_from_csv(os.path.join(DATA_DIR, "simple_graph.csv"))
+    # source = "S"
+    source = str(random.randint(0, n))
     # # print(graph)
+    bfs = BFS()
+    longest_acyclic_path = bfs.get_longest_acyclic_path(graph, source)
+    sink = longest_acyclic_path[-1]
+    length_longest_acyclic_path = len(longest_acyclic_path)
+    total_edges = len(graph.get_edges())
+    metrics = Metrics(length_longest_acyclic_path, total_edges)
 
+    strategies = [BFS(), Dijkstra(), ShortestAugmentingPath(), DFSlike(), MaximumCapacity(), Random()]
 
-    ff = FordFulkerson(strategy=BFS())
-    print(ff.get_flow(graph, "S", "T"))
+    for strategy in strategies:
+        print(f"<-------- Strategy {strategy.__class__.__name__} -------->")
+        ff = FordFulkerson(strategy=strategy)
+        max_flow = ff.get_flow(graph, source, sink, metrics)
+        print_metrics(max_flow, length_longest_acyclic_path, metrics)
+        metrics.reset()
 
-    ff = FordFulkerson(strategy=Dijkstra())    
-    print(ff.get_flow(graph, "S", "T"))
+    # graph_params = [
+    #     {'n': 100, 'r': 0.2, 'upperCap': 2},
+    #     {'n': 200, 'r': 0.2, 'upperCap': 2},
+    #     {'n': 100, 'r': 0.3, 'upperCap': 2},
+    #     {'n': 200, 'r': 0.3, 'upperCap': 2},
+    #     {'n': 100, 'r': 0.2, 'upperCap': 50},
+    #     {'n': 200, 'r': 0.2, 'upperCap': 50},
+    #     {'n': 100, 'r': 0.3, 'upperCap': 50},
+    #     {'n': 200, 'r': 0.3, 'upperCap': 50}
+    # ]
 
-    ff = FordFulkerson(strategy=ShortestAugmentingPath())
-    print(ff.get_flow(graph, "S", "T"))
-
-    ff = FordFulkerson(strategy=DFSlike())
-    print(ff.get_flow(graph, "S", "T"))
-
-    ff = FordFulkerson(strategy=MaximumCapacity())
-    print(ff.get_flow(graph, "S", "T"))
-
-    ff = FordFulkerson(strategy=Random())
-    print(ff.get_flow(graph, "S", "T"))
+    # for graph_param in graph_params:
+    #     graph_generator = GraphGenerator(graph_param['n'], graph_param['r'], graph_param['upperCap'])
+    #     graph = graph_generator.generate()
 
 
 if __name__ == "__main__":
