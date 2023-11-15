@@ -26,12 +26,10 @@ def main():
     # # print(graph)
 
 
-    bfs = BFS()
-    ff = FordFulkerson(strategy=bfs)
+    ff = FordFulkerson(strategy=BFS())
     print(ff.get_flow(graph, "S", "T"))
 
-    dijkstra = Dijkstra()
-    ff = FordFulkerson(strategy=dijkstra)    
+    ff = FordFulkerson(strategy=Dijkstra())    
     print(ff.get_flow(graph, "S", "T"))
 
 
