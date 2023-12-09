@@ -1,6 +1,12 @@
-from .AugmentationStrategy import BFS, DFSlike, Dijkstra, MaximumCapacity, Random, ShortestAugmentingPath
+from .BFS import BFS
+from .DFSlike import DFSlike
+from .Dijkstra import Dijkstra
+from .MaximumCapacity import MaximumCapacity
+from .Random import Random
+from .ShortestAugmentingPath import ShortestAugmentingPath
 
-def strategy_factory(self, strategy):
+
+def strategy_factory(strategy):
     if strategy.lower() == "normal" or strategy.lower() == "bfs":
         return BFS()
     elif strategy.lower() == "dfslike":
