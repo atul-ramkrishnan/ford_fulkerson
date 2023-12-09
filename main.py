@@ -7,10 +7,12 @@ from graph.GraphGenerator import GraphGenerator
 from definitions import DATA_DIR, RESULTS_FILE
 from FordFulkerson import FordFulkerson
 from utilities.Metrics import Metrics
+from utilities.Logger import Logger
 import argparse
 
 
 def print_metrics(max_flow, length_longest_acyclic_path, metrics):
+    print("-------------------- METRICS ---------------------")
     print(f"Max flow: {max_flow}")
     print(f"Longest acyclic path length: {length_longest_acyclic_path}")
     print(f"Number paths: {metrics.get_number_paths()}")
@@ -20,6 +22,14 @@ def print_metrics(max_flow, length_longest_acyclic_path, metrics):
 
 
 def main():
+    ford_fulkerson_header = """
+    ------------------------------------
+    Ford-Fulkerson Algorithm
+    ------------------------------------
+    """
+
+    print(ford_fulkerson_header)
+
     parser = argparse.ArgumentParser(description='Find the max flow using the Ford-Fulkerson algorithm.')
 
     group = parser.add_mutually_exclusive_group(required=True)
@@ -28,7 +38,7 @@ def main():
     group.add_argument('--run_simulation1', action='store_true', help='Run predefined simulation 1.')
     group.add_argument('--run_simulation2', action='store_true', help='Run predefined simulation 2.')
 
-    parser.add_argument('--strategy', choices=['Normal', 'SAP', 'DFSlike', 'MaxCap', 'Random'], required=False, help='Strategy to be used.')
+    parser.add_argument('--strategy', choices=['normal', 'sap', 'dfslike', 'maxcap', 'random'], required=False, type=str.lower, help='Strategy to be used.')
 
     # Arguments for graph generation
     parser.add_argument('--n', type=int, help='Number of vertices, required if --generate is used.')
@@ -44,6 +54,7 @@ def main():
     # Parse arguments
     args = parser.parse_args()
 
+    logger = Logger(args.result_file)
     # Handle different modes
     if args.run_simulation1:
         print("Running Simulation 1")
@@ -84,8 +95,6 @@ def main():
                 parser.error("--file requires --source and --sink.")
 
             print(f"Loading graph from file: {args.file}")
-            if not os.path.isfile(args.file):
-                raise FileNotFoundError
             
             graph = Graph()
             graph.load_from_csv(os.path.join(DATA_DIR, args.file))
@@ -107,6 +116,21 @@ def main():
         ff = FordFulkerson(strategy=strategy)
         max_flow = ff.get_flow(graph, source, sink, metrics)
         print_metrics(max_flow, length_longest_acyclic_path, metrics)
+
+        logger.write_to_log(graph_name=args.file,
+                            n=args.n,
+                            r=args.r,
+                            upperCap=args.upperCap,
+                            source=source,
+                            sink=sink,
+                            strategy=args.strategy,
+                            max_flow=max_flow,
+                            longest_acyclic_path_length=length_longest_acyclic_path,
+                            number_paths=metrics.get_number_paths(),
+                            mean_length=metrics.get_mean_length(),
+                            mpl=metrics.get_mean_proportional_length(),
+                            total_edges=total_edges
+                            )
     
 
 if __name__ == "__main__":
