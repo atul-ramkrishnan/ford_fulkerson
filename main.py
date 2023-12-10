@@ -4,7 +4,7 @@ from augmentation_strategy.strategy_factory import strategy_factory
 from augmentation_strategy.BFS import BFS
 from graph.Graph import Graph
 from graph.GraphGenerator import GraphGenerator
-from definitions import DATA_DIR, RESULTS_FILE
+from definitions import DATA_DIR, RESULTS_FILE, SIMULATION1_DIR, SIMULATION2_DIR
 from FordFulkerson import FordFulkerson
 from utilities.Metrics import Metrics
 from utilities.Logger import Logger
@@ -12,13 +12,15 @@ import argparse
 
 
 def print_metrics(max_flow, length_longest_acyclic_path, metrics):
-    print("-------------------- METRICS ---------------------")
+    print("METRICS")
+    print("-------")
     print(f"Max flow: {max_flow}")
     print(f"Longest acyclic path length: {length_longest_acyclic_path}")
     print(f"Number paths: {metrics.get_number_paths()}")
     print(f"Mean length: {metrics.get_mean_length()}")
     print(f"MPL: {metrics.get_mean_proportional_length()}")
     print(f"Total edges: {metrics.get_total_edges()}")
+    print("\n")
 
 
 def main():
@@ -49,20 +51,65 @@ def main():
     parser.add_argument('--source', type=str, help='Source vertex, required if --file is used.')
     parser.add_argument('--sink', type=str, help='Sink vertex, required if --file is used.')
 
-    parser.add_argument('--result_file', type=str, default=RESULTS_FILE, help='File to store results. Default is "results/results.txt".')
+    parser.add_argument('--result_file', type=str, default=RESULTS_FILE, help='File to store results. Default is "results/results.csv".')
 
     # Parse arguments
     args = parser.parse_args()
 
     logger = Logger(args.result_file)
+    
     # Handle different modes
-    if args.run_simulation1:
-        print("Running Simulation 1")
+    if args.run_simulation1 or args.run_simulation2:
+        graph_dir = None
+        if args.run_simulation1:
+            graph_dir = SIMULATION1_DIR
+            print("RUNNING SIMULATION 1")
+        else:
+            graph_dir = SIMULATION2_DIR
+            print("RUNNING SIMULATION 2")
+        print("\n")
+        
+        strategies = ["sap", "dfslike", "maxcap", "random"]
         # Code for running simulation 1
+        for filename in os.listdir(graph_dir):
+            file_path = os.path.join(graph_dir, filename)
+            if os.path.isfile(file_path):
+                graph = Graph()
+                graph.load_from_csv(file_path)
+                if not graph:
+                    raise RuntimeError(f"Graph could not be loaded from the file {filename}")
+                print("------------------------------------")
+                print(f"Loading graph from file: {filename}")
+                print("------------------------------------")
+                source = "0"
+                bfs = BFS()
+                longest_acyclic_path = bfs.get_longest_acyclic_path(graph, source)
+                sink = longest_acyclic_path[-1]
+                
+                length_longest_acyclic_path = len(longest_acyclic_path)
+                total_edges = len(graph.get_edges())
+                metrics = Metrics(length_longest_acyclic_path, total_edges)
 
-    elif args.run_simulation2:
-        print("Running Simulation 2")
-        # Code for running simulation 2
+                for s in strategies:
+                    print(f"Selected strategy: {s}")
+                    print("--------------------------")
+                    strategy = strategy_factory(s)
+                    ff = FordFulkerson(strategy=strategy)
+                    max_flow = ff.get_flow(graph, source, sink, metrics)
+                    print_metrics(max_flow, length_longest_acyclic_path, metrics)
+
+                    logger.write_to_log(graph_name=filename,
+                                        source=source,
+                                        sink=sink,
+                                        strategy=s,
+                                        max_flow=max_flow,
+                                        longest_acyclic_path_length=length_longest_acyclic_path,
+                                        number_paths=metrics.get_number_paths(),
+                                        mean_length=metrics.get_mean_length(),
+                                        mpl=metrics.get_mean_proportional_length(),
+                                        total_edges=total_edges
+                                        )
+                    metrics.reset()
 
     elif args.generate or args.file:
         if args.strategy is None:
@@ -120,9 +167,6 @@ def main():
         print_metrics(max_flow, length_longest_acyclic_path, metrics)
 
         logger.write_to_log(graph_name=args.file,
-                            n=args.n,
-                            r=args.r,
-                            upperCap=args.upperCap,
                             source=source,
                             sink=sink,
                             strategy=args.strategy,

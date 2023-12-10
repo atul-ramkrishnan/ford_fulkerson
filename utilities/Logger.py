@@ -1,16 +1,17 @@
 import csv
 import os
 from datetime import datetime
-
+from definitions import RESULTS_DIR
 
 class Logger():
     def __init__(self, log_file):
-        self.log_file = log_file
-        if not os.path.isfile(log_file):
-            os.makedirs(os.path.dirname(log_file), exist_ok=True)
+        self.log_file = os.path.join(RESULTS_DIR, log_file)
+        if not os.path.exists(RESULTS_DIR):
+                os.mkdir(RESULTS_DIR)
+        if not os.path.isfile(self.log_file):
             with open(self.log_file, 'x', newline='') as csv_file:
                 writer = csv.writer(csv_file)
-                writer.writerow(['Timestamp', 'File', 'n', 'r', 'upperCap', 'source', 'sink', 'strategy', 'max_flow', 'longest_acyclic_path', 'number_paths', 'mean_length', 'MPL', 'total_edges'])
+                writer.writerow(['Timestamp', 'File', 'source', 'sink', 'strategy', 'max_flow', 'longest_acyclic_path', 'number_paths', 'mean_length', 'MPL', 'total_edges'])
    
 
     def write_to_log(self, *, source, sink, strategy, max_flow, longest_acyclic_path_length, number_paths, mean_length, mpl, total_edges, graph_name=None, n=None, r=None, upperCap=None):
@@ -19,11 +20,8 @@ class Logger():
             row = []
             row.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             row.append('N/A' if graph_name is None else graph_name)
-            row.append('N/A' if n is None else n)
-            row.append('N/A' if r is None else r)
-            row.append('N/A' if upperCap is None else upperCap)
-            row.append(sink)
             row.append(source)
+            row.append(sink)
             row.append(strategy)
             row.append(max_flow)
             row.append(longest_acyclic_path_length)
