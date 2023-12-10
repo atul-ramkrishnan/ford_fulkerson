@@ -40,7 +40,6 @@ class DFSlike(AugmentationStrategy):
             visited.add(u)
 
             for v in graph.get_adjacent_vertices(u):
-                print(f"{u} --> {v}")             
                 if self._relax(u, v, distance, predecessors):
                     heapq.heappush(Q, (distance[v], v))
 
