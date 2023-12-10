@@ -102,10 +102,12 @@ def main():
                 raise RuntimeError(f"Graph could not be loaded from the file {args.file}")
             
             source = args.source
-            sink = args.sink
-
             bfs = BFS()
+            sink = args.sink
             longest_acyclic_path = bfs.get_longest_acyclic_path(graph, source)
+            if sink is None:
+                sink = longest_acyclic_path[-1]
+            
             length_longest_acyclic_path = len(longest_acyclic_path)
             total_edges = len(graph.get_edges())
             metrics = Metrics(length_longest_acyclic_path, total_edges)
