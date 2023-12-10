@@ -13,9 +13,10 @@ class DFSlike(AugmentationStrategy):
     def _decrement_counter(self):
         self.counter -= 1
     
-    def _relax(self, u, v, w, distance, predecessors):
-        if distance[v] > distance[u] + w:
-            distance[v] = distance[u] + w
+    def _relax(self, u, v, distance, predecessors):
+        if distance[v] == float('inf'):
+            distance[v] = self._get_counter()
+            self._decrement_counter()
             predecessors[v] = u
             return True
         return False
@@ -39,9 +40,9 @@ class DFSlike(AugmentationStrategy):
             visited.add(u)
 
             for v in graph.get_adjacent_vertices(u):
-                if self._relax(u, v, self._get_counter(), distance, predecessors):
+                print(f"{u} --> {v}")             
+                if self._relax(u, v, distance, predecessors):
                     heapq.heappush(Q, (distance[v], v))
-                    self._decrement_counter()
 
         if sink not in predecessors:
             return None

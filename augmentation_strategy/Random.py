@@ -4,9 +4,9 @@ from .AugmentationStrategy import AugmentationStrategy
 
 
 class Random(AugmentationStrategy):
-    def _relax(self, u, v, w, distance, predecessors):
-        if distance[v] > distance[u] + w:
-            distance[v] = distance[u] + w
+    def _relax(self, u, v, distance, predecessors):
+        if distance[v] == float('inf'):
+            distance[v] = random.uniform(0, 1)
             predecessors[v] = u
             return True
         return False
@@ -30,7 +30,7 @@ class Random(AugmentationStrategy):
             visited.add(u)
 
             for v in graph.get_adjacent_vertices(u):
-                if self._relax(u, v, random.uniform(0, 1), distance, predecessors):
+                if self._relax(u, v, distance, predecessors):
                     heapq.heappush(Q, (distance[v], v))
 
         if sink not in predecessors:

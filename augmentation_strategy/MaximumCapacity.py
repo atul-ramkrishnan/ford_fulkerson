@@ -11,9 +11,9 @@ class MaximumCapacity(AugmentationStrategy):
         return False
     
     def get_augmenting_path(self, graph, source, sink):
-        distance = {vertex:float('-inf') for vertex in graph.get_vertices()}
-        distance[source] = 0
-        Q = [(0, source)]
+        distance = {vertex:float('-inf') for vertex in graph.get_vertices()}            
+        distance[source] = float('inf')
+        Q = [(float('-inf'), source)]
         heapq.heapify(Q)
         predecessors = {source: None}
         visited = set()
@@ -31,7 +31,7 @@ class MaximumCapacity(AugmentationStrategy):
 
             for v in graph.get_adjacent_vertices(u):
                 if self._relax(u, v, graph.get_capacity(u, v), distance, predecessors):
-                    heapq.heappush(Q, (distance[v], v))
+                    heapq.heappush(Q, (-distance[v], v))
 
         if sink not in predecessors:
             return None

@@ -1,0 +1,8 @@
+Source,Target,Capacity,Flow
+S,F,5,0
+S,B,2,0
+B,D,8,0
+D,T,1,0
+C,F,2,0
+F,T,10,0
+S,C,12,0
