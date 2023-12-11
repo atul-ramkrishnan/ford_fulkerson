@@ -73,14 +73,14 @@ def main():
         # Code for running simulation 1
         for filename in os.listdir(graph_dir):
             file_path = os.path.join(graph_dir, filename)
-            if os.path.isfile(file_path):
+            if os.path.isfile(file_path) and filename.endswith('.csv'):
                 graph = Graph()
                 graph.load_from_csv(file_path)
                 if not graph:
                     raise RuntimeError(f"Graph could not be loaded from the file {filename}")
-                print("------------------------------------")
-                print(f"Loading graph from file: {filename}")
-                print("------------------------------------")
+                print("------------------------------------------------------------------")
+                print(f"Loading graph from file: {file_path}")
+                print("------------------------------------------------------------------")
                 source = "0"
                 bfs = BFS()
                 longest_acyclic_path = bfs.get_longest_acyclic_path(graph, source)
