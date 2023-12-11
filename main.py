@@ -40,7 +40,7 @@ def main():
     group.add_argument('--run_simulation1', action='store_true', help='Run predefined simulation 1.')
     group.add_argument('--run_simulation2', action='store_true', help='Run predefined simulation 2.')
 
-    parser.add_argument('--strategy', choices=['normal', 'sap', 'dfslike', 'maxcap', 'random'], required=False, type=str.lower, help='Strategy to be used.')
+    parser.add_argument('--strategy', choices=['bfs', 'sap', 'dfslike', 'maxcap', 'random'], required=False, type=str.lower, help='Strategy to be used.')
 
     # Arguments for graph generation
     parser.add_argument('--n', type=int, help='Number of vertices, required if --generate is used.')
