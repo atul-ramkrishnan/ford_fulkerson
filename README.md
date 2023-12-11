@@ -14,7 +14,7 @@ To run any script, first you need to go the project directory
   cd ford_fulkerson
 ```
 
-The graph files for simulation 1 and simulation 2 are present in the `data/simulation1` and `data\simulation2` folders respectively.
+The graph files for simulation 1 and simulation 2 are present in the `data/simulation1` and `data/simulation2` folders respectively.
 For convenience, the results in the project report can be replicated by running a single command. Running the below script iterates over all the files pertinent to the simulation and prints out the results in the terminal along with generating a csv file in the results folder.
 
 ### Running Simulation 1
