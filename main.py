@@ -138,8 +138,8 @@ def main():
             metrics = Metrics(length_longest_acyclic_path, total_edges)
 
         elif args.file:
-            if args.source is None or args.sink is None:
-                parser.error("--file requires --source and --sink.")
+            if args.source is None:
+                parser.error("--file requires --source.")
 
             print(f"Loading graph from file: {args.file}")
             
