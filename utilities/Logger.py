@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from definitions import RESULTS_DIR
 
+
 class Logger():
     def __init__(self, log_file):
         self.log_file = os.path.join(RESULTS_DIR, log_file)
@@ -26,8 +27,8 @@ class Logger():
             row.append(max_flow)
             row.append(longest_acyclic_path_length)
             row.append(number_paths)
-            row.append(mean_length)
-            row.append(mpl)
+            row.append(round(mean_length, 3))
+            row.append(round(mpl, 3))
             row.append(total_edges)
 
             writer.writerow(row)
