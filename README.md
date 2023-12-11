@@ -14,6 +14,7 @@ To run any script, first you need to go the project directory
   cd ford_fulkerson
 ```
 
+The graph files for simulation 1 and simulation 2 are present in the `data/simulation1` and `data\simulation2` folders respectively.
 For convenience, the results in the project report can be replicated by running a single command. Running the below script iterates over all the files pertinent to the simulation and prints out the results in the terminal along with generating a csv file in the results folder.
 
 ### Running Simulation 1
@@ -56,7 +57,7 @@ At any time, help on how to run the script can be obtained by running the follow
 
 ### Note
 
-In all the commands, the option `--result_file` is optional. It can be used to specify the name of the csv file where the results are to be saved. By default it is saved in `results/results.csv`
+In all the commands, the option `--result_file` is optional. It can be used to specify the name of the csv file where the results are to be saved. By default it is saved in `results/results.csv`. If the same file is used for multiple runs, the results are appended to the end of the csv file. The file is not overwritten.
 
 ## Additional
 
