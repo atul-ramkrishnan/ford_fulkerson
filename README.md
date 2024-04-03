@@ -1,5 +1,3 @@
-
-# COMP 6651 Project
 ## Ford Fulkerson algorithm
 
 The Maximum flow problem involves finding the maximum amount of "flow" that can be transported from a designated source vertex to a designated sink vertex without violating any capacity constraints. The Ford-Fulkerson algorithm is a greedy algorithm for tackling the maximum flow problem.
